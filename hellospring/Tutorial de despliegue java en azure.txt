@@ -1,0 +1,68 @@
+Desplegar aplicación Java con App Service de forma directa y construyendo los recursos desde el pom de la aplicación
+a través del plugin hacia azure
+===========================================================================================================================================
+Prerequisitos : tener una cuenta en azure y haberse logueado en dicha suscripción
+Nota : al desplegarse el proyecto en azure, éste aprovisiona tanto grupo de servicios el plan app service como el app service 
+-------------------------------------------------------------------------------------------------------------------------------------------
+paso 1 : Clone el proyecto de ejemplo
+git clone https://github.com/hmvanega/capacitacionAzure.git/hellospring
+-------------------------------------------------------------------------------------------------------------------------------------------
+paso 2 : se debe agregar el siguiente plugin en el pom para que se puede conectar con la suscripción de azure, se debe tener en cuenta tanto el 
+id de la suscripción como tambien el nombre que aparece en la etiqueta AppName
+
+<plugins> 
+      <plugin> 
+        <groupId>org.springframework.boot</groupId>  
+        <artifactId>spring-boot-maven-plugin</artifactId> 
+      </plugin>  
+      <plugin>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-webapp-maven-plugin</artifactId>
+        <version>1.14.0</version>
+        <configuration>
+          <schemaVersion>v2</schemaVersion>
+          <subscriptionId>f137239a-e6c3-4d2f-b94f-f617371a4f7d</subscriptionId>
+          <resourceGroup>terraform-rg</resourceGroup>
+          <appName>spring-boot-hector</appName>
+          <pricingTier>F1</pricingTier>
+          <region>eastus</region>
+          <runtime>
+            <os>Linux</os>
+            <javaVersion>Java 8</javaVersion>
+            <webContainer>Java SE</webContainer>
+          </runtime>
+          <deployment>
+            <resources>
+              <resource>
+                <directory>${project.basedir}/target</directory>
+                <includes>
+                  <include>*.jar</include>
+                </includes>
+              </resource>
+            </resources>
+          </deployment>
+        </configuration>
+      </plugin>
+ </plugins>  
+===========================================================================================================================================
+paso 3: se debe colocar el id de la suscripción que aparece en azure y el grupo de recursos que se haya creado previamente
+y alli se pueden configurar las otras propiedades del azure
+---------------------------------------------------------------------------------------------------------------------------------------
+paso 4 : pararse en la root del proyecto y ejecutar el siguiente comando de Maven para configurar la implementación. Este comando ayudará a 
+configurar el sistema operativo de App Service, la versión de Java y la versión de Tomcat.
+
+mvn com.microsoft.azure:azure-webapp-maven-plugin:1.14.0:config
+
+en ese momento le va a pedir los datos de configuración de azure, le va a mostrar los que se definió en el pom, si se modifica alguno de ellos 
+se actualizará directamente en el pom
+------------------------------------------------------------------------------------------------------------------------------------------
+paso 5 : Implementar aplicación
+ 1. iniciar en el CLI de Azure con : az login
+ 2. implementar la aplicación de Java en Azure mediante el siguiente comando : 
+	 mvn package azure-webapp:deploy
+	 en este paso la compilación redirigirá a la cuenta de azure para que se loguee o puede antes loguearse
+, alli empezará a crear todos los recursos de azure ,  despues de eso se despliegua la app y al final en la consola nos muestra la ruta donde se desplegó 
+el componente   (este proceo puede tardar un buen momento)
+-------------------------------------------------------------------------------------------------------------------------------------------
+paso 6 : Validar el despliegue del aplicativo con  el siguiente comando :
+ http://<appName>.azurewebsites.net/(http://spring-boot-hector.azurewebsites.net 
