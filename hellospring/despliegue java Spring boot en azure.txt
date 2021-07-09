@@ -1,0 +1,34 @@
+Desplegar aplicación Java con App Service de forma directa y construyendo los recursos a traves del servicio de Spring cloud
+de forma rapida y sencilla
+===========================================================================================================================================
+Prerequisitos : Descargar este proyecto que sirve de prueba para el despliegue de esta info  y se debe tener creado un grupo de recursos 
+en la suscripcion de azure
+-------------------------------------------------------------------------------------------------------------------------------------------
+paso 1 : Clone el proyecto de ejemplo
+git clone https://github.com/hmvanega/capacitacionAzure.git/hellospring
+-------------------------------------------------------------------------------------------------------------------------------------------
+paso 2 : se debe contruir una instancia de Azure Spring Cloud como se muestra en la imagen 1 y 2 que se encuentran en la raiz del proyecto clonado
+---------------------------------------------------------------------------------------------------------------------------------------------
+paso 3: Para llenar la información que se requiere para la creación del servicio Azure Spring Clod, se debe tener en cuenta los siguientes aspectos:
+
+Suscripción : seleccione la suscripción a la que desea que se le facture por este recurso.
+Grupo de recursos : la creación de nuevos grupos de recursos para nuevos recursos es una práctica recomendada. Esto se utilizará en pasos posteriores como <nombre del grupo de recursos> .
+Detalles / Nombre del servicio : especifique el <nombre de la instancia del servicio> . El nombre debe tener entre 4 y 32 caracteres y solo puede contener letras minúsculas, números y guiones. El primer carácter del nombre del servicio debe ser una letra y el último carácter debe ser una letra o un número.
+Ubicación : seleccione la región para su instancia de servicio.
+
+Luego se de dar en crear como se muestra en la imagen 3
+
+===========================================================================================================================================
+paso 3: Crear e implementar la aplicación:
+	1. Construye el proyecto ubicándose en la raíz del mismo con el siguiente comando : 
+		mvn clean package –DskipTests
+	2. Instalar la extensión de Azure Spring Cloud para la CLI de Azure
+		az extension add --name spring-cloud
+	3. Crear la aplicación con un extremo público asignado
+		az spring-cloud app create -n hellospring -s service-hector -g terraform-rg-hector --assign-endpoint true
+	4. Implementar el archivo .jar para la aplicación en la siguiente ruta :  target\hellospring-0.0.1-SNAPSHOT.jar
+	NOTA: service-hector , corresponde al app service name que se debe colocar cuando se esta construyendo el servicio de Azure Spring Cloud
+		Con el siguiente comando : az spring-cloud app deploy -n hellospring -s service-hector -g terraform-rg-hector --jar-path target\hellospring-0.0.1-SNAPSHOT.jar
+	5. Ejecutar  la validación de la exposición del servicio en azure : 
+		https://service-hector-hellospring.azuremicroservices.io/. 
+
