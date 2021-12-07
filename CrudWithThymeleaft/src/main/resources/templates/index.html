@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title th:utext="${title}" />
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    </head>
+    <body>
+        <h1 th:utext="${title}" />
+        <a th:href="@{/api/lista}">Lista de productos</a>  
+        
+        <br/><br/>
+         <h1 th:utext="${title}" />
+        <a th:href="@{/api/formulario}">Agregar un nuevo producto</a>  
+        
+       <!--  <br/><br/>
+         <h1 th:utext="${title}" />
+        <a th:href="@{/api/eliminar}">Eliminar un producto</a>  
+        
+        <br/><br/>
+         <h1 th:utext="${title}" />
+        <a th:href="@{/api/actualizar)">Actualizar un producto</a>   -->
+        
+        <br/><br/>
+        <div>Copyright © dariawan</div>
+    </body>
+</html>

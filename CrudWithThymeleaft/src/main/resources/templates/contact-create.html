@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title th:text="${add} ? 'Create a Contact' : 'Edit a Contact'" />
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    </head>
+    <body>
+        <h1 th:text="${add} ? 'Create a Contact:' : 'Edit a Contact:'" />
+        <a th:href="@{/contacts}">Back to Contact List</a>
+        <br/><br/>
+        <form th:action="${add} ? @{/contacts/add} : @{/contacts/{contactId}/edit(contactId=${contact.id})}"
+              th:object="${contact}" method="POST">
+            <table border="0">
+                <tr th:if="${contact.id}">
+                    <td>ID</td>
+                    <td>:</td>
+                    <td th:utext="${contact.id}">...</td>             
+                </tr>
+                <tr>
+                    <td>Codigo</td>
+                    <td>:</td>
+                    <td><input type="text" th:field="*{name}" /></td>              
+                </tr>
+                <tr>
+                    <td>Nombre</td>
+                    <td>:</td>
+                    <td><input type="text" th:field="*{phone}" /></td>              
+                </tr>
+                <tr>
+                    <td>Precio</td>
+                    <td>:</td>
+                    <td><input type="text" th:field="*{email}" /></td>              
+               
+            </table>
+            <input type="submit" th:value="${add} ? 'Create' : 'Update'" />
+        </form>
+ 
+        <br/>
+        <!-- Check if errorMessage is not null and not empty -->       
+        <div th:if="${errorMessage}" th:utext="${errorMessage}" class="error" />       
+    </body>
+</html>
